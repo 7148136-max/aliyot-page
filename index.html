@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#141833">
+<title>סידור וניהול – עליות לתורה</title>
+<style>
+  html,body{margin:0;padding:0;height:100%;background:#141833;overflow:hidden}
+  iframe{position:fixed;inset:0;width:100%;height:100%;border:0;display:block;background:#F5F0E3}
+</style>
+</head>
+<body>
+<!-- דף עטיפה לניסיון: פותח את אפליקציית העליות של Google Apps Script בתוך הדף, כדי שההודעה של גוגל לא תופיע בראש המסך.
+     כל מה שנמצא אחרי סימן השאלה בכתובת (למשל ?k=... של גבאי, או ?test=1) מועבר לאפליקציה כמו שהוא. -->
+<iframe id="app" title="סידור וניהול – עליות לתורה" allow="clipboard-write; clipboard-read; geolocation"></iframe>
+<script>
+  var APP = 'https://script.google.com/macros/s/AKfycbzshH2JR54w4_dzNUVfMJoTqHvmvlzMy0Ls5pXygUOm9at0P9PbrPgwUGSKXdn5jdqU/exec';
+  // גם מה שאחרי "#" עובר לאפליקציה – שם מגיע אישור הכניסה של הגבאים (גרסה 140)
+  document.getElementById('app').src = APP + (location.search || '') + (location.hash || '');
+</script>
+</body>
+</html>
