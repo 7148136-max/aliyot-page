@@ -11,18 +11,30 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="עליות לתורה">
 <style>
-  html,body{margin:0;padding:0;height:100%;background:#141833;overflow:hidden}
+  html,body{margin:0;padding:0;height:100%;background:#141833;overflow:hidden;font-family:Arial,sans-serif}
   iframe{position:fixed;inset:0;width:100%;height:100%;border:0;display:block;background:#F5F0E3}
+  #fb{position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));display:none;align-items:center;gap:10px;background:#141833;color:#fff;border:1px solid #C9A14A;border-radius:14px;padding:10px 12px;z-index:2;box-shadow:0 6px 24px rgba(0,0,0,.35);font-size:14px}
+  #fb.on{display:flex}
+  #fb span{flex:1;line-height:1.4}
+  #fb a{background:#C9A14A;color:#141833;font-weight:700;text-decoration:none;border-radius:10px;padding:8px 12px;white-space:nowrap}
+  #fb button{background:none;border:0;color:#fff;opacity:.7;font-size:18px;cursor:pointer;padding:4px 6px}
 </style>
 </head>
 <body>
-<!-- דף עטיפה לניסיון: פותח את אפליקציית העליות של Google Apps Script בתוך הדף, כדי שההודעה של גוגל לא תופיע בראש המסך.
-     כל מה שנמצא אחרי סימן השאלה בכתובת (למשל ?k=... של גבאי, או ?test=1) מועבר לאפליקציה כמו שהוא. -->
+<!-- דף עטיפה: פותח את אפליקציית העליות של Google Apps Script בתוך הדף, כדי שההודעה של גוגל לא תופיע בראש המסך.
+     כל מה שבכתובת אחרי "?" ואחרי "#" (למשל ?k=... של גבאי, #t=... של אישור הכניסה) מועבר לאפליקציה כמו שהוא.
+     דפדפן שלא מחובר לחשבון גוגל (או שחוסם עוגיות של צד שלישי) לא מציג את האפליקציה בתוך מסגרת –
+     לכן אם האפליקציה לא הודיעה שנטענה תוך 12 שניות, מופיע למטה פס קטן עם כפתור לפתיחה ישירה. -->
 <iframe id="app" title="סידור וניהול – עליות לתורה" allow="clipboard-write; clipboard-read; geolocation"></iframe>
+<div id="fb" role="status"><span>האפליקציה לא נפתחת? כנראה הדפדפן לא מחובר לחשבון גוגל.</span><a id="go" href="#" target="_top">פתיחה ישירה</a><button type="button" aria-label="סגירה" onclick="document.getElementById('fb').classList.remove('on')">✕</button></div>
 <script>
   var APP = 'https://script.google.com/macros/s/AKfycbzshH2JR54w4_dzNUVfMJoTqHvmvlzMy0Ls5pXygUOm9at0P9PbrPgwUGSKXdn5jdqU/exec';
-  // גם מה שאחרי "#" עובר לאפליקציה – שם מגיע אישור הכניסה של הגבאים (גרסה 140)
-  document.getElementById('app').src = APP + (location.search || '') + (location.hash || '');
+  var full = APP + (location.search || '') + (location.hash || '');
+  document.getElementById('app').src = full;
+  document.getElementById('go').href = full;
+  var ready = false;
+  window.addEventListener('message', function (e) { if (e && e.data === 'aliyot-ready') { ready = true; document.getElementById('fb').classList.remove('on'); } });
+  setTimeout(function () { if (!ready) document.getElementById('fb').classList.add('on'); }, 12000);
 </script>
 </body>
 </html>
