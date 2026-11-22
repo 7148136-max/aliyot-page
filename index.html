@@ -29,7 +29,16 @@
 <div id="fb" role="status"><span>האפליקציה לא נפתחת? כנראה הדפדפן לא מחובר לחשבון גוגל.</span><a id="go" href="#" target="_top">פתיחה ישירה</a><button type="button" aria-label="סגירה" onclick="document.getElementById('fb').classList.remove('on')">✕</button></div>
 <script>
   var APP = 'https://script.google.com/macros/s/AKfycbzshH2JR54w4_dzNUVfMJoTqHvmvlzMy0Ls5pXygUOm9at0P9PbrPgwUGSKXdn5jdqU/exec';
-  var full = APP + (location.search || '') + (location.hash || '');
+  // הקוד האישי של הגבאי (?k=) נשמר במכשיר בפעם הראשונה, כדי שגם סמל במסך הבית (שפותח את הכתובת בלי ?k=) ייכנס ישר.
+  // ?k=ניקוי מוחק את הקוד השמור מהמכשיר.
+  var search = location.search || '';
+  try {
+    var m = search.match(/[?&]k=([^&#]*)/), saved = localStorage.getItem('aliyotK') || '';
+    if (m && m[1] === 'ניקוי' || m && decodeURIComponent(m[1]) === 'ניקוי') { localStorage.removeItem('aliyotK'); search = ''; history.replaceState(null, '', '/'); }
+    else if (m && m[1]) localStorage.setItem('aliyotK', decodeURIComponent(m[1]));
+    else if (saved) { search = (search ? search + '&' : '?') + 'k=' + encodeURIComponent(saved); history.replaceState(null, '', '/' + search + (location.hash || '')); }
+  } catch (e) {}
+  var full = APP + search + (location.hash || '');
   document.getElementById('app').src = full;
   document.getElementById('go').href = full;
   var ready = false;
